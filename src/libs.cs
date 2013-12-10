@@ -4,12 +4,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Libs
 {
     public class ImageContainer
     {
-	private string path_filename = "crop_path.txt";
+	private String path_filename = "crop_path.txt";
 	public string basePath = "";
 
 	public String getNewFilename()
@@ -21,7 +22,7 @@ namespace Libs
 		int new_num = lastest_num + 1;
 		String new_num_str = new_num.ToString();
 		Console.WriteLine(new_num_str);
-		String new_filename = basePath + "\\image" + new_num_str + ".jpg";
+		String new_filename = basePath + "\\image" + new_num_str + ".png";
 		return new_filename;
 	    }
 
@@ -58,7 +59,7 @@ namespace Libs
 
 	private uint getNum(String file_name)
 	    {
-		String regexp_num = "image([0-9]+).jpg";
+		String regexp_num = "image([0-9]+).(?i)(png|jpg)";
 		String filename = Path.GetFileName(file_name);
 		Match match = Regex.Match(filename, regexp_num);
 		
@@ -101,8 +102,7 @@ namespace Libs
 		    return this.basePath;
 		}
 	    }
+	
     }
     
 }
-
-

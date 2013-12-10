@@ -2,6 +2,11 @@ import SCons.Util
 import SCons.Node.FS
 #from scons_csharp import add_version
 
+import os
+CUR_PATH = Dir('#').abspath
+REFS_3RD_PATH = os.path.join(CUR_PATH, 'assemblies')
+
+
 env = Environment(tools=['scons_csharp', 'msvs'])
 
 def add_version(target, source, env):
@@ -36,10 +41,16 @@ refs = [
     'System.Drawing.dll',
     'System.Core.dll',
     'mscorlib.dll',
+    ]
 
-    'assemblies/nunit.framework.dll',
+refs_3rd = [
+    'nunit.framework.dll',
     #'PresentationFramework.dll' # To use We have to add dll. See 'CILLIBPATH'
     ]
+
+refs_3rd = [os.path.join(REFS_3RD_PATH, ff) for ff in refs_3rd]
+
+refs = refs + refs_3rd
 
 refs_testing = [
     'nunit.framework.dll'
@@ -60,6 +71,8 @@ sources = ['main.cs',
            'Crop/ResizeManager.cs',
            ]
 
+sources = [os.path.join('src/', ff) for ff in sources]
+
 #TODO: We need a function to get the name of the directory of .NET framework.
 
 # csc couldn't find PresentationFramework.dll. So we have to manually add
@@ -75,5 +88,5 @@ env['CILLIBPATH'] = [
     ]
 
 env.CLIProgram2('bin/crop.exe', sources, ASSEMBLYREFS=refs, WINEXE=True)
-#env.CLILibrary2('libsTest.dll', ['libsTest.cs', 'libs.cs'], ASSEMBLYREFS=refs)
+env.CLILibrary2('tests/libsTest.dll', ['tests/libsTest.cs', 'src/libs.cs'], ASSEMBLYREFS=refs)
 #env.CLIProgram('test.exe', ['test.cs', 'libs.cs'], ASSEMBLYREFS=refs)
